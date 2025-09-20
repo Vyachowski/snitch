@@ -5,6 +5,7 @@ class SiteHealthTest < ActiveSupport::TestCase
     @input = "google.com"
     @http_input = "http://google.com"
     @https_input = "https://google.com"
+    @valid_input_without_ssl = "http://grandwholeuniquelight.neverssl.com/online/"
     @invalid_input = "notasite"
 
     @valid_url = URI.parse "https://google.com"
@@ -20,8 +21,15 @@ class SiteHealthTest < ActiveSupport::TestCase
 
   test "valid protocol switching" do
     http_uri = SiteHealth.parse_url(@http_input)
+    https_based_uri = SiteHealth.parse_url(@https_input)
     https_uri = SiteHealth.try_https_protocol(http_uri)
 
+    http_only_uri = SiteHealth.parse_url(@valid_input_without_ssl)
+    http_only_uri_unchanged = SiteHealth.try_https_protocol(http_only_uri)
+    https_only_uri = SiteHealth.try_https_protocol(https_based_uri)
+
     assert https_uri.scheme == "https"
+    assert https_only_uri.scheme == "https"
+    assert http_only_uri_unchanged.scheme == "http"
   end
 end

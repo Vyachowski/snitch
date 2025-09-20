@@ -1,3 +1,6 @@
+require "uri"
+require "net/http"
+
 module SiteHealth
   PROTOCOL_REGEX = /^(http|https):\/\//
   URL_REGEX = URI::DEFAULT_PARSER.make_regexp(%w[http https])
@@ -19,16 +22,18 @@ module SiteHealth
 
     https_uri = uri.dup
     https_uri.scheme = "https"
+    https_port = https_uri.port == 80 ? 443 : https_uri.port
 
     begin
-      response = Net::HTTP.get_response(https_uri)
+      http = Net::HTTP.new(https_uri.host, https_port)
+      http.use_ssl = true
+      http.verify_mode = OpenSSL::SSL::VERIFY_PEER
 
-      return https_uri if response.is_a?(Net::HTTPResponse)
-    rescue StandardError
-      # ignore errors
+      response = http.get(https_uri.request_uri)
+      response.is_a?(Net::HTTPResponse) ? https_uri : uri
+    rescue
+      uri
     end
-
-    uri
   end
 
   def self.server_responds?(uri)

@@ -21,15 +21,18 @@ class SiteHealthTest < ActiveSupport::TestCase
 
   test "valid protocol switching" do
     http_uri = SiteHealth.parse_url(@http_input)
-    https_based_uri = SiteHealth.parse_url(@https_input)
     https_uri = SiteHealth.try_https_protocol(http_uri)
+
+    assert https_uri.scheme == "https"
+
+    https_based_uri = SiteHealth.parse_url(@https_input)
+    https_only_uri = SiteHealth.try_https_protocol(https_based_uri)
+
+    assert https_only_uri.scheme == "https"
 
     http_only_uri = SiteHealth.parse_url(@valid_input_without_ssl)
     http_only_uri_unchanged = SiteHealth.try_https_protocol(http_only_uri)
-    https_only_uri = SiteHealth.try_https_protocol(https_based_uri)
 
-    assert https_uri.scheme == "https"
-    assert https_only_uri.scheme == "https"
     assert http_only_uri_unchanged.scheme == "http"
   end
 end

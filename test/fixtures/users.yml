@@ -11,3 +11,9 @@ two:
   browser_storage_id: add_id2
   email: mail2@mail.com
   password_digest: MyString
+
+three:
+  browser_id: id3
+  browser_storage_id: add_id3
+  email: mail3@mail.com
+  password_digest: MyString

@@ -1,5 +1,5 @@
 class User < ApplicationRecord
-  has_many :sites
+  has_many :sites, dependent: :destroy
 
   validates :browser_id, presence: true, uniqueness: true
   validates :browser_storage_id, presence: true, uniqueness: true

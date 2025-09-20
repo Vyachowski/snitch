@@ -4,10 +4,11 @@ require "net/http"
 module SiteHealth
   PROTOCOL_REGEX = /^(http|https):\/\//
   URL_REGEX = URI::DEFAULT_PARSER.make_regexp(%w[http https])
+  DEFAULT_PROTOCOL = "http://"
 
   def self.parse_url(input)
     begin
-      url_string = input.match(PROTOCOL_REGEX) ? input : "https://#{input}"
+      url_string = input.match(PROTOCOL_REGEX) ? input : "#{DEFAULT_PROTOCOL}#{input}"
       return nil unless url_string.match(URL_REGEX)
 
       uri = URI.parse(url_string)

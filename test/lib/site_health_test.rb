@@ -1,5 +1,4 @@
 require "test_helper"
-require "./lib/site_health"
 
 class SiteHealthTest < ActiveSupport::TestCase
   setup do
@@ -19,5 +18,10 @@ class SiteHealthTest < ActiveSupport::TestCase
     assert SiteHealth.parse_url(@invalid_input).nil?
   end
 
-  test ""
+  test "valid protocol switching" do
+    http_uri = SiteHealth.parse_url(@http_input)
+    https_uri = SiteHealth.try_https_protocol(http_uri)
+
+    assert https_uri.scheme == "https"
+  end
 end

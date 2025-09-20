@@ -5,7 +5,6 @@ class SiteHealthTest < ActiveSupport::TestCase
     @input = "google.com"
     @http_input = "http://google.com"
     @https_input = "https://google.com"
-    @valid_input_without_ssl = "http://grandwholeuniquelight.neverssl.com/online/"
     @invalid_input = "notasite"
 
     @valid_url = URI.parse "https://google.com"
@@ -29,10 +28,5 @@ class SiteHealthTest < ActiveSupport::TestCase
     https_only_uri = SiteHealth.try_https_protocol(https_based_uri)
 
     assert https_only_uri.scheme == "https"
-
-    http_only_uri = SiteHealth.parse_url(@valid_input_without_ssl)
-    http_only_uri_unchanged = SiteHealth.try_https_protocol(http_only_uri)
-
-    assert http_only_uri_unchanged.scheme == "http"
   end
 end

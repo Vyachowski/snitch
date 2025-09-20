@@ -10,5 +10,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 0) do
+ActiveRecord::Schema[8.0].define(version: 2025_09_20_151852) do
+  create_table "users", force: :cascade do |t|
+    t.string "browser_id", null: false
+    t.string "browser_storage_id", null: false
+    t.string "email"
+    t.string "password_digest"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["browser_id"], name: "index_users_on_browser_id", unique: true
+    t.index ["browser_storage_id"], name: "index_users_on_browser_storage_id", unique: true
+    t.index ["email"], name: "index_users_on_email", unique: true
+  end
 end

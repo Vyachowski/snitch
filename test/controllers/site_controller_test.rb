@@ -1,32 +1,31 @@
 require "test_helper"
 
 class SiteControllerTest < ActionDispatch::IntegrationTest
-  # setup do
-  #   @user = users(:one)
-  # end
+  setup do
+    @user = users(:one)
+    @site = sites(:one)
+  end
 
-  # test "should get index" do
-  #   get user_tests_url, as: :json
-  #   assert_response :success
-  # end
+  test "should get index" do
+    get sites_url, as: :json
+    assert_response :success
+  end
 
-  # test "should create user" do
-  #   assert_difference("User.count") do
-  #     post users_url, params: { user: {
-  #       browser_id: "unique_browser_id_#{SecureRandom.hex(4)}",
-  #       browser_storage_id: "unique_storage_id_#{SecureRandom.hex(4)}",
-  #       email: "user#{SecureRandom.hex(4)}@example.com",
-  #       password_digest: "password123"
+  # test "should create site" do
+  #   assert_difference("Site.count") do
+  #     post sites_url, params: { site: {
+  #       url: "https://sitechecker.com",
+  #       user: @user
   #     } }, as: :json
   #   end
 
   #   assert_response :created
   # end
 
-  # test "should show user" do
-  #   get user_url(@user), as: :json
-  #   assert_response :success
-  # end
+  test "should show site" do
+    get site_url(@user), as: :json
+    assert_response :success
+  end
 
   # test "should update user" do
   #   patch user_url(@user), params: { user: { browser_id: @user.browser_id, browser_storage_id: @user.browser_storage_id, email: @user.email, password_digest: @user.password_digest } }, as: :json

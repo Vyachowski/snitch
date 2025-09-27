@@ -4,4 +4,8 @@ class User < ApplicationRecord
   validates :browser_id, presence: true, uniqueness: true
   validates :browser_storage_id, presence: true, uniqueness: true
   validates :email, uniqueness: true, allow_nil: true, format: { with: URI::MailTo::EMAIL_REGEXP, message: "must be a valid email address" }
+
+  def self.authenticate_by(browser_id:)
+    find_by(browser_id: browser_id)
+  end
 end

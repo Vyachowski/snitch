@@ -13,7 +13,7 @@ class SiteControllerTest < ActionDispatch::IntegrationTest
 
   # test "should create site" do
   #   assert_difference("Site.count") do
-  #     post sites_url, params: { site: {
+  #     post site_url, params: { site: {
   #       url: "https://sitechecker.com",
   #       user: @user
   #     } }, as: :json
@@ -27,12 +27,12 @@ class SiteControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  # test "should update user" do
-  #   patch user_url(@user), params: { user: { browser_id: @user.browser_id, browser_storage_id: @user.browser_storage_id, email: @user.email, password_digest: @user.password_digest } }, as: :json
+  # test "should update site" do
+  #   patch site_url(@user), params: { user: { browser_id: @user.browser_id, browser_storage_id: @user.browser_storage_id, email: @user.email, password_digest: @user.password_digest } }, as: :json
   #   assert_response :success
   # end
 
-  # test "should destroy user" do
+  # test "should destroy site" do
   #   assert_difference("User.count", -1) do
   #     delete user_url(@user), as: :json
   #   end

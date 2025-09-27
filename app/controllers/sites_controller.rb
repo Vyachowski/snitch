@@ -13,7 +13,7 @@ class SitesController < ApplicationController
   end
 
   def create
-    @site = Site.new(site_params)
+    @site = current_user.sites.new(site_params)
 
     if @site.save
       render json: @site, status: :created, location: @site

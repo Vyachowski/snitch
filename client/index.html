@@ -1,16 +1,47 @@
 <!doctype html>
-<html lang="en">
-    <head>
-        <title>Site Uptime Monitoring</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Site Uptime Monitoring</title>
 
-        <link rel="stylesheet" href="/styles.css">
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-    </head>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
 
-    <body>
+  <body class="bg-slate-50 min-h-screen flex items-center justify-center">
+    <main class="w-full max-w-3xl px-4">
+      <section class="bg-white shadow-md rounded-2xl p-6">
+        <header class="mb-4">
+          <h1 class="text-2xl font-semibold text-slate-800">Site Uptime Monitoring</h1>
+          <p class="text-sm text-slate-500 mt-1">Добавьте сайт для мониторинга</p>
+        </header>
 
-        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.min.js" integrity="sha384-G/EV+4j2dNv+tEPo3++6LCgdCROaejBqfUeNjuKAiuXbjrxilcCdDz6ZAVfHWe1Y" crossorigin="anonymous"></script>
-    </body>
+        <form class="w-full" id="add-site-form" action="#" method="post" novalidate>
+          <div class="flex flex-wrap items-end gap-4 mb-4">
+            <div class="flex flex-col">
+              <label for="protocol" class="text-sm text-slate-600 mb-1">Protocol</label>
+              <select id="protocol" name="protocol" class="w-32 rounded-lg border border-slate-200 px-3 py-2 bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-sky-300">
+                <option value="http">http://</option>
+                <option value="https" selected>https://</option>
+              </select>
+            </div>
+
+            <div class="flex-1 min-w-[220px]">
+              <label for="site-address" class="text-sm text-slate-600 mb-1 block">New site address</label>
+              <input id="site-address" name="site" type="text" placeholder="example.com" class="w-full rounded-lg border border-slate-200 px-3 py-2 bg-white text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-300" aria-describedby="siteHelp" />
+              <p id="siteHelp" class="text-xs text-slate-400 mt-1 min-[408px]:absolute">Добавляйте адрес без протокола (напр., <span class="font-mono">example.com</span>).</p>
+            </div>
+
+            <div class="self-stretch flex items-end">
+              <button type="submit" class="inline-flex items-center justify-center rounded-lg bg-sky-600 hover:bg-sky-700 text-white px-4 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-sky-300">
+                Add site
+              </button>
+            </div>
+          </div>
+        </form>
+      </section>
+    </main>
+
+    <script type="module" src="/script.js"></script>
+  </body>
 </html>

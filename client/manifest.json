@@ -1,0 +1,11 @@
+{
+  "name": "Site uptime tracker",
+  "description": "The easiest way for site monitoring",
+  "version": "1.0",
+  "manifest_version": 3,
+  "permissions": ["storage"],
+  "action": {
+    "default_popup": "index.html",
+    "default_icon": "icon.png"
+  }
+}

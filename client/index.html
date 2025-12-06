@@ -8,79 +8,86 @@
   </head>
 
   <body class="bg-slate-50 min-h-screen flex items-center justify-center">
-    <main class="w-full max-w-3xl px-4">
-      <section class="bg-white shadow-md rounded-2xl p-6">
-        <header class="mb-4 flex items-center justify-between">
-          <div>
+      <main class="w-full max-w-3xl px-4 flex flex-col items-center justify-center gap-4">
+        <section class="bg-white shadow-md rounded-2xl p-6 w-full">
+          <header class="mb-4">
             <h1 class="text-2xl font-semibold text-slate-800">Site Uptime Monitoring</h1>
             <p class="text-sm text-slate-500 mt-1">Manage monitored sites</p>
-          </div>
+          </header>
 
           <button
             id="open-modal"
-            class="rounded-lg bg-sky-600 hover:bg-sky-700 text-white px-4 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-sky-300"
+            class="w-full rounded-lg bg-sky-600 hover:bg-sky-700 text-white px-4 py-3 shadow-sm focus:outline-none focus:ring-2 focus:ring-sky-300"
           >
             Add new site
           </button>
-        </header>
-      </section>
-    </main>
+        </section>
 
-    <div
-      id="modal-overlay"
-      class="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-200"
-    >
-      <div class="bg-white rounded-2xl shadow-lg p-6 w-full max-w-lg scale-95 transition-transform duration-200" id="modal-box">
-        <h2 class="text-xl font-semibold text-slate-800 mb-3">Add site for monitoring</h2>
+        <section class="bg-white shadow-md rounded-2xl p-6 w-full">
+          <header class="mb-4">
+            <h1 class="text-2xl font-semibold text-slate-800">Site Uptime Monitoring</h1>
+          </header>
+        </section>
+      </main>
 
-        <form class="w-full" id="add-site-form" action="#" method="post" novalidate>
-          <div class="flex flex-wrap items-end gap-4 mb-4">
-            <div class="flex flex-col">
-              <label for="protocol" class="text-sm text-slate-600 mb-1">Protocol</label>
-              <select
-                id="protocol"
-                name="protocol"
-                class="w-32 rounded-lg border border-slate-200 px-3 py-2 bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-sky-300"
-              >
-                <option value="http">http://</option>
-                <option value="https" selected>https://</option>
-              </select>
-            </div>
-
-            <div class="flex-1 min-w-[220px] relative">
-              <label for="site-address" class="text-sm text-slate-600 mb-1 block">New site address</label>
-              <input
-                id="site-address"
-                name="site"
-                type="text"
-                placeholder="example.com"
-                class="w-full rounded-lg border border-slate-200 px-3 py-2 bg-white text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-300"
-                aria-describedby="siteHelp"
-              />
-              <p id="siteHelp" class="text-xs text-slate-400 mt-1 min-[408px]:absolute">
-                Add address without protocol (e.g. <span class="font-mono">example.com</span>).
-              </p>
-            </div>
-
-            <div class="self-stretch flex items-end">
-              <button
-                type="submit"
-                class="inline-flex items-center justify-center rounded-lg bg-sky-600 hover:bg-sky-700 text-white px-4 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-sky-300"
-              >
-                Add site
-              </button>
-            </div>
-          </div>
-        </form>
-
-        <button
-          id="close-modal"
-          class="mt-4 w-full rounded-lg bg-slate-200 hover:bg-slate-300 text-slate-700 px-4 py-2 transition"
+      <div
+        id="modal-overlay"
+        class="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-200"
+      >
+        <div
+          class="relative bg-white rounded-2xl shadow-lg p-6 w-full max-w-lg scale-95 transition-transform duration-200"
+          id="modal-box"
         >
-          Close
-        </button>
+          <button
+            id="close-modal"
+            class="absolute top-3 right-3 text-slate-400 hover:text-slate-600 text-xl leading-none"
+          >
+            ×
+          </button>
+
+          <h2 class="text-xl font-semibold text-slate-800 mb-3">Add site for monitoring</h2>
+
+          <form class="w-full" id="add-site-form" action="#" method="post" novalidate>
+            <div class="flex flex-wrap items-end gap-4 mb-4">
+              <div class="flex flex-col">
+                <label for="protocol" class="text-sm text-slate-600 mb-1">Protocol</label>
+                <select
+                  id="protocol"
+                  name="protocol"
+                  class="w-32 rounded-lg border border-slate-200 px-3 py-2 bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-sky-300"
+                >
+                  <option value="http">http://</option>
+                  <option value="https" selected>https://</option>
+                </select>
+              </div>
+
+              <div class="flex-1 min-w-[220px] relative">
+                <label for="site-address" class="text-sm text-slate-600 mb-1 block">New site address</label>
+                <input
+                  id="site-address"
+                  name="site"
+                  type="text"
+                  placeholder="example.com"
+                  class="w-full rounded-lg border border-slate-200 px-3 py-2 bg-white text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-300"
+                  aria-describedby="siteHelp"
+                />
+                <p id="siteHelp" class="text-xs text-slate-400 mt-1 min-[408px]:absolute">
+                  Add address without protocol (e.g. <span class="font-mono">example.com</span>).
+                </p>
+              </div>
+
+              <div class="self-stretch flex items-end">
+                <button
+                  type="submit"
+                  class="inline-flex items-center justify-center rounded-lg bg-sky-600 hover:bg-sky-700 text-white px-4 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-sky-300"
+                >
+                  Add site
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
       </div>
-    </div>
 
     <script src="/script.js" type="module"></script>
   </body>

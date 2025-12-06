@@ -1,3 +1,4 @@
+// Modal window
 const modal = document.getElementById("modal-overlay");
 const modalBox = document.getElementById("modal-box");
 const openBtn = document.getElementById("open-modal");
@@ -19,3 +20,5 @@ closeBtn.addEventListener("click", closeModal);
 modal.addEventListener("click", (e) => {
   if (e.target === modal) closeModal();
 });
+
+// Add site

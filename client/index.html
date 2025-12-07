@@ -1,76 +1,13 @@
 <!doctype html>
-<html lang="ru">
+<html lang="en">
   <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Site Uptime Monitoring</title>
-
-    <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/icon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Site health monitoring</title>
   </head>
-
   <body>
-    <main class="container">
-      <section class="card">
-        <header class="card__header">
-          <h1 class="card__title">Site Uptime Monitoring</h1>
-          <p class="card__subtitle">Manage monitored sites</p>
-        </header>
-
-        <button id="open-modal" class="button button--primary button--fullwidth">
-          Add new site
-        </button>
-      </section>
-
-      <section class="card">
-        <header class="card__header">
-          <h1 class="card__title">Site list</h1>
-        </header>
-
-        <ul class="site-list">
-
-        </ul>
-      </section>
-    </main>
-
-    <div id="modal-overlay" class="modal">
-      <div class="modal__box" id="modal-box">
-        <button id="close-modal" class="modal__close">×</button>
-
-        <h2 class="modal__title">Add site for monitoring</h2>
-
-        <form class="form" id="add-site-form" action="#" method="post" novalidate>
-          <div class="form__row">
-            <div class="form__group">
-              <label for="protocol" class="form__label">Protocol</label>
-              <select id="protocol" name="protocol" class="form__select">
-                <option value="http">http://</option>
-                <option value="https" selected>https://</option>
-              </select>
-            </div>
-
-            <div class="form__group form__group--flexible">
-              <label for="site-address" class="form__label">New site address</label>
-              <input
-                id="site-address"
-                name="site"
-                type="text"
-                placeholder="example.com"
-                class="form__input"
-                aria-describedby="siteHelp"
-              />
-              <p id="siteHelp" class="form__help">
-                Add address without protocol (e.g. <span class="form__mono">example.com</span>).
-              </p>
-            </div>
-
-            <div class="form__group form__group--submit">
-              <button id="add-site" type="submit" class="button button--primary">Add site</button>
-            </div>
-          </div>
-        </form>
-      </div>
-    </div>
-
-    <script src="/script.js" type="module"></script>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

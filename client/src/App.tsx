@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/Button/button";
 import {
   Dialog,
   DialogContent,
@@ -56,7 +56,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-slate-50 to-slate-100 p-6">
+    <div className="min-h-[90dvh] bg-linear-to-br from-slate-50 to-slate-100 p-6">
       <div className="max-w-4xl mx-auto">
         <div className="bg-white rounded-lg shadow-lg p-6 space-y-6">
           <div className="flex flex-col items-center justify-between">

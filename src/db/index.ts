@@ -43,7 +43,7 @@ const makeDailyStatsId = (siteId: string, date: string) =>
 
 const addSite = async (
   url: string,
-  intervalMinutes: number
+  intervalMinutes: number = 1
 ): Promise<Site> => {
   const site: Site = {
     id: crypto.randomUUID(),

@@ -30,6 +30,12 @@ db.version(1).stores({
 const today = (): string =>
   new Date().toISOString().slice(0, 10)
 
+const daysAgo = (days: number): string => {
+  const d = new Date()
+  d.setDate(d.getDate() - days)
+  return d.toISOString().slice(0, 10)
+}
+
 const makeDailyStatsId = (siteId: string, date: string) =>
   `${siteId}:${date}`
 
@@ -47,6 +53,10 @@ const addSite = async (
 
   await db.sites.add(site)
   return site
+}
+
+const getAllSites = async (): Promise<Site[]> => {
+  return db.sites.toArray()
 }
 
 const updateSiteDailyStats = async (
@@ -79,14 +89,42 @@ const updateSiteDailyStats = async (
 }
 
 /**
+ * Годовой аптайм за последние 365 дней
+ */
+const getYearlyUptime = async (
+  siteId: string
+): Promise<number | null> => {
+  const fromDate = daysAgo(365)
+
+  const stats = await db.dailyStats
+    .where("siteId")
+    .equals(siteId)
+    .and(row => row.date >= fromDate)
+    .toArray()
+
+  if (stats.length === 0) return null
+
+  const totalChecks = stats.reduce(
+    (sum, d) => sum + d.checks,
+    0
+  )
+
+  if (totalChecks === 0) return null
+
+  const upChecks = stats.reduce(
+    (sum, d) => sum + d.up,
+    0
+  )
+
+  return (upChecks / totalChecks) * 100
+}
+
+/**
  * Удаляет сайт и ВСЮ его статистику
  */
 const removeSite = async (siteId: string): Promise<void> => {
   await db.transaction("rw", db.sites, db.dailyStats, async () => {
-    // удалить сайт
     await db.sites.delete(siteId)
-
-    // удалить всю статистику по сайту
     await db.dailyStats
       .where("siteId")
       .equals(siteId)
@@ -97,6 +135,8 @@ const removeSite = async (siteId: string): Promise<void> => {
 export type { Site, DailyStats }
 export {
   addSite,
+  getAllSites,
   updateSiteDailyStats,
+  getYearlyUptime,
   removeSite
 }

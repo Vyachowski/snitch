@@ -2,6 +2,7 @@ import { Dexie, type EntityTable } from "dexie"
 
 interface Site {
   id: string
+  name: string
   url: string
   intervalMinutes: number
 }
@@ -24,7 +25,7 @@ class UptimeDatabase extends Dexie {
   constructor() {
     super("UptimeDatabase")
     this.version(1).stores({
-      sites: "id, url",
+      sites: "id, url, name",
       dailyStats: "id, siteId, date"
     })
   }
@@ -39,9 +40,10 @@ class UptimeDatabase extends Dexie {
     return `${siteId}:${date}`
   }
 
-  async addSite(url: string, intervalMinutes: number): Promise<Site> {
-    const site: Site = { id: crypto.randomUUID(), url, intervalMinutes }
+  async addSite(name: string, url: string, intervalMinutes: number): Promise<Site> {
+    const site: Site = { id: crypto.randomUUID(), name, url, intervalMinutes }
     await this.sites.add(site)
+
     return site
   }
 

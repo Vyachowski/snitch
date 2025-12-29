@@ -1,7 +1,7 @@
-import path from "path";
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
-import tailwindcss from "@tailwindcss/vite";
+import path from "path"
+import tailwindcss from "@tailwindcss/vite"
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -14,15 +14,14 @@ export default defineConfig({
   build: {
     rollupOptions: {
       input: {
-        app: "index.html",
-        background: "src/background/worker.ts"
+        background: "src/background/index.ts",
+        content: "src/content/index.ts",
+        side_panel: "index.html",
       },
       output: {
-        entryFileNames: chunk =>
-          chunk.name === "background"
-            ? "background.js"
-            : "assets/[name].js"
-      }
-    }
-  }
-})
+        entryFileNames: "[name].js",
+      },
+    },
+    outDir: "dist",
+  },
+});

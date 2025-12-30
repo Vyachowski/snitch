@@ -1,5 +1,7 @@
 import { db } from "@/db"
 
+/* ---------------- checker ---------------- */
+
 const checkSite = async (url: string): Promise<boolean> => {
   try {
     const controller = new AbortController()
@@ -17,6 +19,8 @@ const checkSite = async (url: string): Promise<boolean> => {
   }
 }
 
+/* ---------------- scheduler ---------------- */
+
 const CHECK_ALARM = "uptime-check"
 
 const scheduleGlobalAlarm = () => {
@@ -25,13 +29,7 @@ const scheduleGlobalAlarm = () => {
   })
 }
 
-/**
- * В памяти воркера:
- * siteId -> timestamp последней проверки
- */
-const lastCheckMap = new Map<string, number>()
-
-/* -------- lifecycle -------- */
+/* ---------------- lifecycle ---------------- */
 
 chrome.runtime.onInstalled.addListener(() => {
   scheduleGlobalAlarm()
@@ -41,14 +39,14 @@ chrome.runtime.onStartup?.addListener(() => {
   scheduleGlobalAlarm()
 })
 
-/* -------- alarms -------- */
+/* ---------------- alarms ---------------- */
 
 chrome.alarms.onAlarm.addListener(async alarm => {
   if (alarm.name !== CHECK_ALARM) return
   await runChecks()
 })
 
-/* -------- messages from UI -------- */
+/* ---------------- messages from UI ---------------- */
 
 chrome.runtime.onMessage.addListener((msg, _, sendResponse) => {
   if (msg.type === "RUN_CHECK_NOW") {
@@ -57,21 +55,23 @@ chrome.runtime.onMessage.addListener((msg, _, sendResponse) => {
   }
 })
 
-/* -------- core logic -------- */
+/* ---------------- core logic ---------------- */
 
 const runChecks = async (force = false) => {
   const sites = await db.getAllSites()
   const now = Date.now()
 
   for (const site of sites) {
-    const last = lastCheckMap.get(site.id) ?? 0
     const intervalMs = site.intervalMinutes * 60_000
 
-    if (!force && now - last < intervalMs) continue
+    const lastCheckAt = site.lastCheckAt ?? 0
+    const shouldRun =
+      force || now - lastCheckAt >= intervalMs
+
+    if (!shouldRun) continue
 
     const isUp = await checkSite(site.url)
-    await db.updateSiteDailyStats(site.id, isUp)
 
-    lastCheckMap.set(site.id, now)
+    await db.recordCheckResult(site.id, isUp)
   }
 }

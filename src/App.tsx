@@ -1,75 +1,73 @@
-import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/Button";
+import { useState } from "react"
+import { useLiveQuery } from "dexie-react-hooks"
+import { Button } from "@/components/ui/Button"
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Trash2 } from "lucide-react";
-import { db, type Site } from "@/db";
+} from "@/components/ui/dialog"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Trash2 } from "lucide-react"
+import { db, type Site } from "@/db"
 
-import "./App.css";
+import "./App.css"
 
 /* ---------------- helpers ---------------- */
 
 const formatDateTime = (ts: number | null) => {
-  if (!ts) return "—";
-  return new Date(ts).toLocaleString("ru-RU");
-};
+  if (!ts) return "—"
+  return new Date(ts).toLocaleString("ru-RU")
+}
 
 const statusDotClass = (isUp: boolean | null) => {
-  if (isUp === undefined) return "bg-gray-300";
-  if (isUp) return "bg-green-500 shadow-lg shadow-green-500/50";
-  return "bg-red-500 shadow-lg shadow-red-500/50";
-};
+  if (isUp === undefined) return "bg-gray-300"
+  if (isUp) return "bg-green-500 shadow-lg shadow-green-500/50"
+  return "bg-red-500 shadow-lg shadow-red-500/50"
+}
 
 /* ---------------- component ---------------- */
 
 export default function App() {
-  const [open, setOpen] = useState(false);
-  const [siteName, setSiteName] = useState("");
-  const [siteUrl, setSiteUrl] = useState("");
-  const [sites, setSites] = useState<Site[]>([]);
-  const [uptimeMap, setUptimeMap] = useState<Record<string, number | null>>({});
+  const [open, setOpen] = useState(false)
+  const [siteName, setSiteName] = useState("")
+  const [siteUrl, setSiteUrl] = useState("")
 
-  /* -------- load data -------- */
+  /* -------- live data -------- */
 
-  const loadSites = async () => {
-    const allSites = await db.getAllSites();
-    setSites(allSites);
+  const sites = useLiveQuery(
+    () => db.sites.toArray(),
+    [],
+    [] as Site[]
+  )
 
-    const newUptime: Record<string, number | null> = {};
-    for (const site of allSites) {
-      newUptime[site.id] = await db.getYearlyUptime(site.id);
-    }
-    setUptimeMap(newUptime);
-  };
-
-  useEffect(() => {
-    loadSites();
-  }, []);
+  const uptimeMap = useLiveQuery<Record<string, number | null>>(
+    async () => {
+      const result: Record<string, number | null> = {}
+      for (const site of sites) {
+        result[site.id] = await db.getYearlyUptime(site.id)
+      }
+      return result
+    },
+    [sites],
+  )
 
   /* -------- actions -------- */
 
   const handleAddSite = async () => {
-    if (!siteName.trim() || !siteUrl.trim()) return;
+    if (!siteName.trim() || !siteUrl.trim()) return
 
-    await db.addSite(siteName, siteUrl, 5);
+    await db.addSite(siteName, siteUrl, 5)
 
-    setSiteName("");
-    setSiteUrl("");
-    setOpen(false);
-
-    await loadSites();
-  };
+    setSiteName("")
+    setSiteUrl("")
+    setOpen(false)
+  }
 
   const handleDeleteSite = async (site: Site) => {
-    await db.removeSite(site.id);
-    await loadSites();
-  };
+    await db.removeSite(site.id)
+  }
 
   /* ---------------- render ---------------- */
 
@@ -101,7 +99,7 @@ export default function App() {
                     id="name"
                     placeholder="Например: Google"
                     value={siteName}
-                    onChange={(e) => setSiteName(e.target.value)}
+                    onChange={e => setSiteName(e.target.value)}
                   />
                 </div>
 
@@ -111,7 +109,7 @@ export default function App() {
                     id="url"
                     placeholder="https://example.com"
                     value={siteUrl}
-                    onChange={(e) => setSiteUrl(e.target.value)}
+                    onChange={e => setSiteUrl(e.target.value)}
                   />
                 </div>
 
@@ -138,8 +136,8 @@ export default function App() {
               </div>
             ) : (
               <div className="space-y-2">
-                {sites.map((site) => {
-                  const uptime = uptimeMap[site.id];
+                {sites.map(site => {
+                  const uptime = uptimeMap?.[site.id]
 
                   return (
                     <div
@@ -162,7 +160,7 @@ export default function App() {
                           </div>
                           <div className="text-xs text-slate-400 mt-1">
                             Аптайм:{" "}
-                            {uptime !== null && uptime !== undefined
+                            {typeof uptime === "number"
                               ? `${uptime.toFixed(1)}%`
                               : "—"}
                           </div>
@@ -187,7 +185,7 @@ export default function App() {
                         <Trash2 className="h-4 w-4 text-red-500" />
                       </Button>
                     </div>
-                  );
+                  )
                 })}
               </div>
             )}
@@ -195,5 +193,5 @@ export default function App() {
         </div>
       </div>
     </div>
-  );
+  )
 }

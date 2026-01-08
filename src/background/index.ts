@@ -51,6 +51,7 @@ chrome.alarms.onAlarm.addListener(async alarm => {
 chrome.runtime.onMessage.addListener((msg, _, sendResponse) => {
   if (msg.type === "RUN_CHECK_NOW") {
     runChecks(true).then(() => sendResponse({ ok: true }))
+
     return true
   }
 })

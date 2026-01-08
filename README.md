@@ -1,7 +1,7 @@
 # Site Uptime Monitor (Snitch)
 
-## 1. What is it and what problem does it solve? (ELI5)
-**Site Uptime Monitor** is a browser extension that helps you track website availability. You add websites, and the extension automatically checks them at set intervals, stores the statistics locally in your browser, and shows uptime and last checks in a convenient interface. **Problem:** You don’t need to manually check if a website is working — the extension does it for you and presents clear statistics.
+## 1. What is it and what problem does it solve?
+**Site Uptime Monitor** is a browser extension that helps you track websites availability. You add websites, and the extension automatically checks them at set intervals, stores the statistics locally in your browser, and shows uptime and last checks in a convenient interface. **Problem:** You don’t need to manually check if a website is working — the extension does it for you and presents clear statistics.
 
 ## 2. How does it work?
 1. **Data storage** — Dexie (IndexedDB) saves websites and daily statistics.  

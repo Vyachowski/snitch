@@ -1,54 +1,25 @@
-# React + TypeScript + Vite
+# Site Uptime Monitor (Snitch)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## 1. Что это, какую проблему решает? (ELI5)
+**Site Uptime Monitor** — это браузерное расширение, которое помогает следить за доступностью сайтов. Ты добавляешь сайты, а расширение автоматически проверяет их через заданные интервалы, хранит статистику локально в браузере и показывает аптайм и последние проверки в удобном интерфейсе. **Проблема:** не нужно вручную проверять, работает ли сайт — расширение делает это за тебя и показывает наглядную статистику.
 
-Currently, two official plugins are available:
+## 2. В чём суть подхода?
+1. **Хранение данных** — Dexie (IndexedDB) сохраняет сайты и дневные статистики.  
+2. **Проверки сайтов** — `fetch` с таймаутом проверяет, доступен ли сайт.  
+3. **Автоматизация** — chrome.alarms запускает проверки каждые `intervalMinutes`.  
+4. **UI** — React-приложение позволяет добавлять/удалять сайты, видеть статус (зелёный/красный), аптайм за последний год и время последней проверки.  
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 3. Как выглядит на примерах?
+### UI
+- Список сайтов: точка состояния (зелёная/красная), URL, аптайм, последняя проверка.  
+- Добавление сайта: название + URL + интервал проверки.  
+- Удаление сайта: иконка корзины.  
 
-## Expanding the ESLint configuration
+## 4. Для использования в Chrome
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+1. Открой `chrome://extensions/`
+2. Включи **Режим разработчика**
+3. Нажми **Загрузить распакованное расширение** → выбери папку `dist` после сборки (`npm run build`)
+4. Расширение появится в Chrome, можно добавить сайты и мониторить аптайм.
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+Или просто установите расширение из магазина расширений Chrome.

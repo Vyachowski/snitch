@@ -13,6 +13,7 @@ import { Trash2 } from "lucide-react"
 import { db, type Site } from "@/db"
 
 import "./App.css"
+import { DialogDescription } from "@radix-ui/react-dialog"
 
 /* ---------------- helpers ---------------- */
 
@@ -33,15 +34,9 @@ export default function App() {
   const [open, setOpen] = useState(false)
   const [siteName, setSiteName] = useState("")
   const [siteUrl, setSiteUrl] = useState("")
+  const [isAdding, setIsAdding] = useState(false)
 
-  /* -------- live data -------- */
-
-  const sites = useLiveQuery(
-    () => db.sites.toArray(),
-    [],
-    [] as Site[]
-  )
-
+  const sites = useLiveQuery(() => db.sites.toArray(), [], [] as Site[])
   const uptimeMap = useLiveQuery<Record<string, number | null>>(
     async () => {
       const result: Record<string, number | null> = {}
@@ -50,19 +45,37 @@ export default function App() {
       }
       return result
     },
-    [sites],
+    [sites]
   )
-
-  /* -------- actions -------- */
 
   const handleAddSite = async () => {
     if (!siteName.trim() || !siteUrl.trim()) return
 
-    await db.addSite(siteName, siteUrl, 5)
+    setIsAdding(true)
 
-    setSiteName("")
-    setSiteUrl("")
-    setOpen(false)
+    try {
+      const newSite = await db.addSite(siteName, siteUrl, 5)
+
+      const controller = new AbortController()
+      const timeout = setTimeout(() => controller.abort(), 8000)
+
+      let isUp = false
+      try {
+        const res = await fetch(siteUrl, { method: "GET", signal: controller.signal })
+        isUp = res.ok
+      } catch {
+        isUp = false
+      } finally {
+        clearTimeout(timeout)
+      }
+
+      await db.recordCheckResult(newSite.id, isUp)
+      setSiteName("")
+      setSiteUrl("")
+      setOpen(false)
+    } finally {
+      setIsAdding(false) // <-- разблокируем кнопку
+    }
   }
 
   const handleDeleteSite = async (site: Site) => {
@@ -87,9 +100,10 @@ export default function App() {
           {/* -------- dialog -------- */}
 
           <Dialog open={open} onOpenChange={setOpen}>
-            <DialogContent>
+            <DialogContent >
               <DialogHeader>
                 <DialogTitle>Добавить новый сайт</DialogTitle>
+                <DialogDescription className="invisible">Форма для добавления нового сайта в мониторинг</DialogDescription>
               </DialogHeader>
 
               <div className="space-y-4 py-4">
@@ -113,8 +127,12 @@ export default function App() {
                   />
                 </div>
 
-                <Button onClick={handleAddSite} className="w-full">
-                  Добавить
+                <Button
+                  onClick={handleAddSite}
+                  className="w-full"
+                  disabled={isAdding}
+                >
+                  {isAdding ? "Добавляем..." : "Добавить"}
                 </Button>
               </div>
             </DialogContent>

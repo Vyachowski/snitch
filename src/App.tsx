@@ -74,7 +74,7 @@ export default function App() {
       setSiteUrl("")
       setOpen(false)
     } finally {
-      setIsAdding(false) // <-- разблокируем кнопку
+      setIsAdding(false)
     }
   }
 
@@ -93,7 +93,7 @@ export default function App() {
               Site Uptime Monitor
             </h2>
             <Button onClick={() => setOpen(true)} className="gap-2 w-100">
-              <span className="text-lg">+</span> Добавить сайт
+              <span className="text-lg">+</span> Add site
             </Button>
           </div>
 
@@ -102,23 +102,23 @@ export default function App() {
           <Dialog open={open} onOpenChange={setOpen}>
             <DialogContent >
               <DialogHeader>
-                <DialogTitle>Добавить новый сайт</DialogTitle>
-                <DialogDescription className="invisible">Форма для добавления нового сайта в мониторинг</DialogDescription>
+                <DialogTitle>Add new site</DialogTitle>
+                <DialogDescription className="invisible">Form for adding site to monitoring</DialogDescription>
               </DialogHeader>
 
               <div className="space-y-4 py-4">
                 <div className="space-y-2">
-                  <Label htmlFor="name">Название сайта</Label>
+                  <Label htmlFor="name">Site name</Label>
                   <Input
                     id="name"
-                    placeholder="Например: Google"
+                    placeholder="Example: Google"
                     value={siteName}
                     onChange={e => setSiteName(e.target.value)}
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="url">URL адрес</Label>
+                  <Label htmlFor="url">URL</Label>
                   <Input
                     id="url"
                     placeholder="https://example.com"
@@ -132,7 +132,7 @@ export default function App() {
                   className="w-full"
                   disabled={isAdding}
                 >
-                  {isAdding ? "Добавляем..." : "Добавить"}
+                  {isAdding ? "Adding..." : "Add"}
                 </Button>
               </div>
             </DialogContent>
@@ -142,14 +142,14 @@ export default function App() {
 
           <div className="space-y-3">
             <h3 className="text-lg font-semibold text-slate-700">
-              Отслеживаемые сайты ({sites.length})
+              Tracked websites ({sites.length})
             </h3>
 
             {sites.length === 0 ? (
               <div className="text-center py-12 text-slate-400">
-                <p className="text-lg">Нет добавленных сайтов</p>
+                <p className="text-lg">No added sites</p>
                 <p className="text-sm">
-                  Нажмите «Добавить сайт», чтобы начать мониторинг
+                  Press "Add site" to start monitoring
                 </p>
               </div>
             ) : (
@@ -177,7 +177,7 @@ export default function App() {
                             {site.url}
                           </div>
                           <div className="text-xs text-slate-400 mt-1">
-                            Аптайм:{" "}
+                            Uptime:{" "}
                             {typeof uptime === "number"
                               ? `${uptime.toFixed(1)}%`
                               : "—"}
@@ -186,7 +186,7 @@ export default function App() {
 
                         <div className="text-right">
                           <div className="text-xs text-slate-400">
-                            Последняя проверка
+                            Last check
                           </div>
                           <div className="text-sm text-slate-600">
                             {formatDateTime(site.lastCheckAt)}
